@@ -3,7 +3,7 @@ const socketio = require('socket.io');
 const http = require('http');
 const cors = require('cors');
 
-const  { addUser, removeUser, getUser, getUsersInRoom} = require('./users');
+const  { addUser, removeUser, getUser, getUsersInRoom } = require('./Users');
 
 const PORT = process.env.PORT || 5000;
 
@@ -15,6 +15,19 @@ const io = socketio(server);
 
 app.use(router);
 app.use(cors());
+
+
+var mongoose = require("mongoose");
+mongoose.Promise = require("bluebird");
+mongoose
+  .connect("mongodb://localhost:27017/quickchat", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    promiseLibrary: require("bluebird")
+  })
+  .then(() => console.log("connection succesful"))
+  .catch(err => console.error(err));
+
 
 
 io.on('connection', (socket) => {
